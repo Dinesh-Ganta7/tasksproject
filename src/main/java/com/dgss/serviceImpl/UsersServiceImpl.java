@@ -1,6 +1,7 @@
 package com.dgss.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.dgss.dto.UsersDTO;
@@ -14,9 +15,13 @@ public class UsersServiceImpl implements UsersService {
 	@Autowired
 	private UsersRepository usersRepository;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 
 	@Override
 	public UsersDTO createUser(UsersDTO userDto) {
+		userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
 		Users user = usersRepository.save(usersDTOToEntity(userDto));
 		return entityToUsersDTO(user);
 	}
